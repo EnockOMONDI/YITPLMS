@@ -13,13 +13,45 @@ pip config set global.trusted-host pypi.org
 echo "⬆️ Upgrading pip..."
 python -m pip install --upgrade pip
 
-# Install Python dependencies
+# Install Python dependencies with PostgreSQL adapter compatibility check
 echo "📚 Installing Python dependencies from requirements.txt..."
-pip install -r requirements.txt
+echo "🐍 Python version: $(python --version)"
+
+# Try installing with psycopg2-binary first
+if pip install -r requirements.txt; then
+    echo "✅ Successfully installed dependencies with psycopg2-binary"
+else
+    echo "⚠️ Failed to install psycopg2-binary, trying psycopg3 alternative..."
+    pip install -r requirements-psycopg3.txt
+    echo "✅ Successfully installed dependencies with psycopg3"
+fi
 
 # Verify Django installation
 echo "🔍 Verifying Django installation..."
 python -c "import django; print(f'Django version: {django.get_version()}')"
+
+# Verify PostgreSQL adapter installation
+echo "🗄️ Verifying PostgreSQL adapter..."
+python -c "
+import sys
+print(f'🐍 Python version: {sys.version}')
+
+# Try psycopg2 first
+try:
+    import psycopg2
+    print(f'✅ psycopg2 version: {psycopg2.__version__}')
+    print(f'✅ PostgreSQL adapter (psycopg2) loaded successfully')
+except ImportError:
+    # Try psycopg3 as fallback
+    try:
+        import psycopg
+        print(f'✅ psycopg version: {psycopg.__version__}')
+        print(f'✅ PostgreSQL adapter (psycopg3) loaded successfully')
+    except ImportError as e:
+        print(f'❌ No PostgreSQL adapter found: {e}')
+        print('🔧 This will cause Django to fail. Check requirements.txt')
+        sys.exit(1)
+"
 
 # Run Django system checks
 echo "🔧 Running Django system checks..."

@@ -4,6 +4,11 @@ services:
     name: entrepreneurship-lms
     runtime: python
     plan: free
+    buildFilter:
+      paths:
+      - build.sh
+      - requirements.txt
+      - runtime.txt
     buildCommand: ./build.sh
     startCommand: gunicorn entrepreneurship_lms.wsgi:application --bind 0.0.0.0:$PORT
     healthCheckPath: /
