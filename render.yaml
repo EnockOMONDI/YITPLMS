@@ -10,7 +10,7 @@ services:
       - requirements.txt
       - runtime.txt
     buildCommand: ./build.sh
-    startCommand: gunicorn entrepreneurship_lms.wsgi:application
+    startCommand: gunicorn entrepreneurship_lms.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --keep-alive 2 --max-requests 1000 --max-requests-jitter 100 --preload
     healthCheckPath: /health/
     envVars:
       - key: SECRET_KEY
@@ -20,7 +20,7 @@ services:
       - key: DJANGO_SETTINGS_MODULE
         value: entrepreneurship_lms.settings
       - key: ALLOWED_HOSTS
-        value:  "*"
+        value: entrepreneurship-lms.onrender.com,127.0.0.1,localhost
       - key: DATABASE_URL
         value: postgresql://neondb_owner:npg_nHl0UNigTdm4@ep-frosty-brook-a8iocmrc-pooler.eastus2.azure.neon.tech/neondb?sslmode=require
       - key: DJANGO_LOG_LEVEL
@@ -32,7 +32,7 @@ services:
       - key: PYTHONUNBUFFERED
         value: true
       - key: WEB_CONCURRENCY
-        value: 4
+        value: 2
       - key: ADMIN_EMAIL
         value: admin@entrepreneurship-lms.com
       - key: ADMIN_USERNAME

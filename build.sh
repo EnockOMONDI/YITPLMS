@@ -4,6 +4,11 @@ set -o errexit
 
 echo "🚀 Starting build process for Entrepreneurship LMS..."
 
+# Clean up any existing processes
+echo "🧹 Cleaning up any existing processes..."
+pkill -f "python manage.py" 2>/dev/null || true
+pkill -f "gunicorn" 2>/dev/null || true
+
 # Modify pip.conf to use a faster index
 echo "📦 Configuring pip for faster package installation..."
 pip config set global.index-url https://pypi.org/simple/
@@ -159,15 +164,18 @@ fi
 
 # Check database connectivity
 echo "🗄️ Testing database connectivity..."
-python manage.py shell << EOF
-from django.db import connection
+python manage.py shell << 'EOF'
+from django.db import connection, connections
 try:
     with connection.cursor() as cursor:
         cursor.execute("SELECT 1")
         result = cursor.fetchone()
     print("✅ Database connection successful")
+    # Explicitly close all database connections
+    connections.close_all()
 except Exception as e:
     print(f"❌ Database connection failed: {e}")
+    connections.close_all()
     exit(1)
 EOF
 
@@ -175,14 +183,17 @@ EOF
 echo "🚀 Testing WSGI application startup..."
 python -c "
 import os
+import sys
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'entrepreneurship_lms.settings')
 try:
     from entrepreneurship_lms.wsgi import application
     print('✅ WSGI application loads successfully')
+    # Ensure clean exit
+    sys.exit(0)
 except Exception as e:
     print(f'❌ WSGI application failed to load: {e}')
-    exit(1)
-"
+    sys.exit(1)
+" || exit 1
 
 # Display build summary
 echo "📋 Build Summary:"
@@ -195,3 +206,11 @@ echo "  🚀 WSGI: Application startup verified"
 
 echo "🎉 Build completed successfully for Entrepreneurship LMS!"
 echo "🚀 Ready for deployment...ok"
+
+# Ensure all background processes are terminated
+echo "🔄 Cleaning up any background processes..."
+jobs -p | xargs -r kill 2>/dev/null || true
+
+# Explicitly exit with success code
+echo "✅ Build script completed successfully - exiting..."
+exit 0
