@@ -1,4 +1,4 @@
-#!/Users/djsean/Desktop/APPS2024/entrepreneurship_lms_complete/entrepreneurship_lms/.venv/bin/python3.12
+#!/Users/djsean/Desktop/APPS2024/entrepreneurship_lms_complete/entrepreneurship_lms/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
