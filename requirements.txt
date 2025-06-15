@@ -28,8 +28,5 @@ dj-database-url==2.3.0
 # Static Files (for production)
 whitenoise==6.8.2
 
-# Development and Debugging (optional)
-django-debug-toolbar==4.4.6
-
 # Security
 django-cors-headers==4.6.0

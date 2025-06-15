@@ -53,9 +53,12 @@ except ImportError:
         sys.exit(1)
 "
 
-# Run Django system checks
+# Run Django system checks (skip tests for now to isolate restart issue)
 echo "🔧 Running Django system checks..."
 python manage.py check --deploy
+
+# Skip tests temporarily to isolate restart loop issue
+echo "⏭️ Skipping tests during deployment to isolate restart issue..."
 
 # Collect static files
 echo "📁 Collecting static files..."
@@ -168,6 +171,19 @@ except Exception as e:
     exit(1)
 EOF
 
+# Test WSGI application startup
+echo "🚀 Testing WSGI application startup..."
+python -c "
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'entrepreneurship_lms.settings')
+try:
+    from entrepreneurship_lms.wsgi import application
+    print('✅ WSGI application loads successfully')
+except Exception as e:
+    print(f'❌ WSGI application failed to load: {e}')
+    exit(1)
+"
+
 # Display build summary
 echo "📋 Build Summary:"
 echo "  🐍 Python version: $(python --version)"
@@ -175,6 +191,7 @@ echo "  🌐 Django version: $(python -c 'import django; print(django.get_versio
 echo "  📦 Installed packages: $(pip list | wc -l) packages"
 echo "  📁 Static files: $(find staticfiles -type f 2>/dev/null | wc -l) files"
 echo "  🗄️ Database: Connected and migrated"
+echo "  🚀 WSGI: Application startup verified"
 
 echo "🎉 Build completed successfully for Entrepreneurship LMS!"
-echo "🚀 Ready for deployment..."
+echo "🚀 Ready for deployment...ok"
