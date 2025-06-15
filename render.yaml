@@ -28,6 +28,12 @@ services:
         value: true
       - key: WEB_CONCURRENCY
         value: 4
+      - key: ADMIN_EMAIL
+        value: admin@entrepreneurship-lms.com
+      - key: ADMIN_USERNAME
+        value: lmsadmin
+      - key: ADMIN_PASSWORD
+        value: LMSAdmin2024!
     disk:
       name: entrepreneurship-lms-disk
       mountPath: /opt/render/project/src/media

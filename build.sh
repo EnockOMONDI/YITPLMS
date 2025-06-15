@@ -47,18 +47,20 @@ from django.db import IntegrityError
 User = get_user_model()
 
 # Admin credentials for LMS
-admin_email = os.environ.get('ADMIN_EMAIL', 'admin@entrepreneurship-lms.com')
-admin_password = os.environ.get('ADMIN_PASSWORD', 'LMSAdmin2024!')
+admin_email = os.environ.get('ADMIN_EMAIL', 'admin@yitp.com')
+admin_password = os.environ.get('ADMIN_PASSWORD', 'yitpadmin')
+admin_username = os.environ.get('ADMIN_USERNAME', 'yitpadmin')
 
 try:
     if not User.objects.filter(email=admin_email).exists():
         admin_user = User.objects.create_superuser(
+            username=admin_username,
             email=admin_email,
             password=admin_password,
             first_name='LMS',
             last_name='Administrator'
         )
-        print(f'✅ Superuser created: {admin_email}')
+        print(f'✅ Superuser created: {admin_email} (username: {admin_username})')
     else:
         print(f'ℹ️ Superuser already exists: {admin_email}')
 except IntegrityError as e:
