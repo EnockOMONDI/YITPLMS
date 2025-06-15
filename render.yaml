@@ -1,17 +1,10 @@
 services:
-  # Django Web Service - Entrepreneurship LMS
   - type: web
     name: entrepreneurship-lms
-    runtime: python
+    env: python
     plan: free
-    buildFilter:
-      paths:
-      - build.sh
-      - requirements.txt
-      - runtime.txt
     buildCommand: ./build.sh
-    startCommand: gunicorn entrepreneurship_lms.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --keep-alive 2 --max-requests 1000 --max-requests-jitter 100 --preload
-    healthCheckPath: /health/
+    startCommand: gunicorn entrepreneurship_lms.wsgi:application
     envVars:
       - key: SECRET_KEY
         generateValue: true
@@ -20,7 +13,7 @@ services:
       - key: DJANGO_SETTINGS_MODULE
         value: entrepreneurship_lms.settings
       - key: ALLOWED_HOSTS
-        value: entrepreneurship-lms.onrender.com,127.0.0.1,localhost
+        value: "*"
       - key: DATABASE_URL
         value: postgresql://neondb_owner:npg_nHl0UNigTdm4@ep-frosty-brook-a8iocmrc-pooler.eastus2.azure.neon.tech/neondb?sslmode=require
       - key: DJANGO_LOG_LEVEL
@@ -32,42 +25,11 @@ services:
       - key: PYTHONUNBUFFERED
         value: true
       - key: WEB_CONCURRENCY
-        value: 2
+        value: 4
       - key: ADMIN_EMAIL
         value: admin@entrepreneurship-lms.com
       - key: ADMIN_USERNAME
         value: lmsadmin
       - key: ADMIN_PASSWORD
         value: LMSAdmin2024!
-    disk:
-      name: entrepreneurship-lms-disk
-      mountPath: /opt/render/project/src/media
-      sizeGB: 1
 
-  # Optional: Background worker service for async tasks (Celery)
-  # - type: worker
-  #   name: entrepreneurship-lms-worker
-  #   runtime: python
-  #   plan: free
-  #   buildCommand: ./build.sh
-  #   startCommand: celery -A entrepreneurship_lms worker --loglevel=info
-  #   envVars:
-  #     - key: SECRET_KEY
-  #       fromService:
-  #         type: web
-  #         name: entrepreneurship-lms
-  #         envVarKey: SECRET_KEY
-  #     - key: DEBUG
-  #       value: false
-  #     - key: DJANGO_SETTINGS_MODULE
-  #       value: entrepreneurship_lms.settings
-  #     - key: DATABASE_URL
-  #       value: postgresql://neondb_owner:npg_nHl0UNigTdm4@ep-frosty-brook-a8iocmrc-pooler.eastus2.azure.neon.tech/neondb?sslmode=require
-  #     - key: PYTHONUNBUFFERED
-  #       value: true
-
-  # Optional: Redis service for caching and sessions
-  # - type: redis
-  #   name: entrepreneurship-lms-redis
-  #   plan: free
-  #   maxmemoryPolicy: allkeys-lru
