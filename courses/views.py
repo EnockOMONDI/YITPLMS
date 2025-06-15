@@ -97,30 +97,72 @@ class CourseDetailView(DetailView):
     model = Course
     template_name = 'courses/course_detail.html'
     context_object_name = 'course'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         course = self.object
-        
-        # Get course modules and lessons
-        modules = course.modules.filter(is_published=True).prefetch_related('lessons')
+
+        # Get course modules and lessons with progress
+        modules = course.modules.filter(is_published=True).prefetch_related(
+            'lessons__student_progress'
+        ).order_by('sort_order')
         context['modules'] = modules
-        
-        # Check if user is enrolled
+
+        # Check if user is enrolled and get progress
+        enrollment = None
+        user_progress = {}
         if self.request.user.is_authenticated:
             try:
                 enrollment = Enrollment.objects.get(student=self.request.user, course=course)
                 context['enrollment'] = enrollment
                 context['is_enrolled'] = True
+
+                # Get user's lesson progress
+                lesson_progress = LessonProgress.objects.filter(
+                    enrollment=enrollment
+                ).select_related('lesson')
+
+                for progress in lesson_progress:
+                    user_progress[progress.lesson.id] = progress
+
             except Enrollment.DoesNotExist:
                 context['is_enrolled'] = False
         else:
             context['is_enrolled'] = False
-        
-        # Get course reviews
-        reviews = course.reviews.filter(is_published=True).select_related('student')[:5]
-        context['reviews'] = reviews
-        
+
+        context['user_progress'] = user_progress
+
+        # Get course reviews and calculate average rating
+        reviews = course.reviews.filter(is_published=True).select_related('student')
+        context['reviews'] = reviews[:5]  # Show first 5 reviews
+        context['all_reviews'] = reviews  # For rating calculation
+
+        # Calculate average rating
+        if reviews.exists():
+            total_rating = sum(review.rating for review in reviews)
+            context['average_rating'] = round(total_rating / reviews.count(), 1)
+            context['rating_count'] = reviews.count()
+        else:
+            context['average_rating'] = 0
+            context['rating_count'] = 0
+
+        # Get instructor profile
+        try:
+            context['instructor_profile'] = course.instructor.profile
+        except:
+            context['instructor_profile'] = None
+
+        # Calculate course statistics
+        context['total_lessons'] = course.total_lessons
+        context['total_modules'] = course.total_modules
+        context['enrolled_count'] = course.enrolled_students_count
+
+        # Get related courses (same category)
+        context['related_courses'] = Course.objects.filter(
+            category=course.category,
+            is_published=True
+        ).exclude(id=course.id)[:3]
+
         return context
 
 
