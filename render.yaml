@@ -1,0 +1,58 @@
+services:
+  # Django Web Service
+  - type: web
+    name: entrepreneurship-lms
+    env: python
+    plan: free
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+    startCommand: gunicorn entrepreneurship_lms.wsgi:application
+    healthCheckPath: /
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: entrepreneurship-lms.onrender.com,127.0.0.1,localhost
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_nHl0UNigTdm4@ep-frosty-brook-a8iocmrc-pooler.eastus2.azure.neon.tech/neondb?sslmode=require
+      - key: DJANGO_LOG_LEVEL
+        value: INFO
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://entrepreneurship-lms.onrender.com,http://127.0.0.1:8000,http://localhost:8000
+      - key: SECURE_SSL_REDIRECT
+        value: true
+    disk:
+      name: entrepreneurship-lms-disk
+      mountPath: /opt/render/project/src/media
+      sizeGB: 1
+
+# Optional: Background worker service for async tasks
+# - type: worker
+#   name: entrepreneurship-lms-worker
+#   env: python
+#   plan: free
+#   buildCommand: |
+#     pip install --upgrade pip
+#     pip install -r requirements.txt
+#   startCommand: python manage.py runworker
+#   envVars:
+#     - key: SECRET_KEY
+#       fromService:
+#         type: web
+#         name: entrepreneurship-lms
+#         envVarKey: SECRET_KEY
+#     - key: DEBUG
+#       value: false
+#     - key: DATABASE_URL
+#       value: postgresql://neondb_owner:npg_nHl0UNigTdm4@ep-frosty-brook-a8iocmrc-pooler.eastus2.azure.neon.tech/neondb?sslmode=require
+
+# Optional: Redis service for caching and sessions
+# - type: redis
+#   name: entrepreneurship-lms-redis
+#   plan: free
+#   maxmemoryPolicy: allkeys-lru
