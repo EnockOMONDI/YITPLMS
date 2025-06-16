@@ -2,12 +2,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.http import JsonResponse
 from django.utils import timezone
 from .models import Course, Category, Module, Lesson
 from progress.models import Enrollment, LessonProgress
 from accounts.models import UserProfile
+
+User = get_user_model()
 
 
 class HomeView(TemplateView):
@@ -356,25 +359,45 @@ class ProfileView(LoginRequiredMixin, TemplateView):
     User profile view
     """
     template_name = 'courses/profile.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        
+
         # Get or create user profile
         profile, created = UserProfile.objects.get_or_create(user=user)
         context['profile'] = profile
-        
+
         # Get user statistics
         enrollments = Enrollment.objects.filter(student=user)
         context['total_enrollments'] = enrollments.count()
         context['completed_courses'] = enrollments.filter(status='completed').count()
         context['active_courses'] = enrollments.filter(status='active').count()
-        
+
         # Get recent achievements
         from progress.models import Achievement
         recent_achievements = Achievement.objects.filter(student=user).order_by('-earned_at')[:5]
         context['recent_achievements'] = recent_achievements
-        
+
+        return context
+
+
+class HowItWorksView(TemplateView):
+    """
+    How It Works information page for YITP administrators
+    """
+    template_name = 'courses/how_it_works.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Add statistics for the overview
+        context['total_courses'] = Course.objects.filter(is_published=True).count()
+        context['total_categories'] = Category.objects.filter(is_active=True).count()
+        context['total_students'] = User.objects.filter(is_active=True).count()
+
+        # Sample course categories for demonstration
+        context['sample_categories'] = Category.objects.filter(is_active=True)[:6]
+
         return context
 
