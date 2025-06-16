@@ -3,49 +3,114 @@
 
 {% block title %}Confirm Your New Email Address - Youth Impact Training Programme{% endblock %}
 
-{% block header_title %}Confirm Email Change{% endblock %}
-{% block header_subtitle %}Verify your new email address{% endblock %}
+{% block preheader %}Confirm your new email address for your YITP account. Secure your entrepreneurship education access with this quick verification.{% endblock %}
+
+{% block header_title %}📧 Email Address Update{% endblock %}
+{% block header_subtitle %}Secure your entrepreneur account access{% endblock %}
 
 {% block content %}
-<h2>Confirm Your New Email Address</h2>
+<h2 style="color: #1f2937; font-size: 26px; margin-bottom: 24px; font-weight: 700; line-height: 1.3;">
+    Confirm Your New Email Address
+</h2>
 
-<p>Hello{% if user.first_name %} {{ user.first_name }}{% endif %},</p>
+<p style="margin-bottom: 18px; font-size: 18px; line-height: 1.7; color: #374151; font-weight: 500;">
+    Hello{% if user.first_name %} {{ user.first_name }}{% endif %} 👋
+</p>
 
-<p>You recently requested to change the email address associated with your Youth Impact Training Programme account.</p>
+<p style="margin-bottom: 18px; font-size: 16px; line-height: 1.7; color: #4b5563;">
+    You recently requested to update the email address associated with your <strong>Youth Impact Training Programme</strong> account.
+    This is an important security step to ensure your entrepreneurship education remains accessible and secure.
+</p>
 
-<p>To complete this change and verify your new email address, please click the button below:</p>
+<p style="margin-bottom: 24px; font-size: 16px; line-height: 1.7; color: #4b5563;">
+    To complete this change and verify your new email address, please confirm by clicking the button below:
+</p>
 
-<div style="text-align: center; margin: 30px 0;">
-    <a href="{{ activate_url }}" class="btn-primary">Confirm New Email</a>
+<div style="text-align: center; margin: 32px 0;">
+    <a href="{{ activate_url }}" style="display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white !important; text-decoration: none; padding: 18px 36px; border-radius: 12px; font-weight: 600; font-size: 18px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); transition: all 0.3s ease;">
+        📧 Confirm New Email Address
+    </a>
 </div>
 
-<div class="highlight-box">
-    <p><strong>What this means:</strong></p>
-    <ul style="margin: 10px 0; padding-left: 20px;">
-        <li>Your old email address will be replaced with this one</li>
-        <li>All future communications will be sent to this email</li>
-        <li>You'll use this email to log into your account</li>
-        <li>This change will take effect immediately after confirmation</li>
+<div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 2px solid #bfdbfe; border-radius: 12px; padding: 28px; margin: 32px 0;">
+    <h3 style="color: #1e40af; font-size: 18px; margin: 0 0 16px 0; font-weight: 600;">
+        📋 What happens after confirmation:
+    </h3>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+        <li style="padding: 8px 0; position: relative; padding-left: 30px; color: #1e40af;">
+            <span style="position: absolute; left: 0; top: 8px; color: #2563eb; font-weight: bold;">✓</span>
+            Your old email address will be replaced with this new one
+        </li>
+        <li style="padding: 8px 0; position: relative; padding-left: 30px; color: #1e40af;">
+            <span style="position: absolute; left: 0; top: 8px; color: #2563eb; font-weight: bold;">✓</span>
+            All future YITP communications will be sent to this email
+        </li>
+        <li style="padding: 8px 0; position: relative; padding-left: 30px; color: #1e40af;">
+            <span style="position: absolute; left: 0; top: 8px; color: #2563eb; font-weight: bold;">✓</span>
+            You'll use this email to log into your entrepreneur account
+        </li>
+        <li style="padding: 8px 0; position: relative; padding-left: 30px; color: #1e40af;">
+            <span style="position: absolute; left: 0; top: 8px; color: #2563eb; font-weight: bold;">✓</span>
+            The change takes effect immediately after confirmation
+        </li>
     </ul>
 </div>
 
-<p>If the button above doesn't work, you can copy and paste this link into your browser:</p>
-<div class="code-block">{{ activate_url }}</div>
-
-<div class="warning-box">
-    <p><strong>Didn't request this change?</strong> If you didn't request to change your email address, please ignore this email and contact our support team immediately. Your account security may be at risk.</p>
+<p style="margin-bottom: 18px; font-size: 16px; line-height: 1.7; color: #4b5563;">
+    <strong>Button not working?</strong> Copy and paste this secure link into your browser:
+</p>
+<div style="background-color: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; padding: 16px; font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace; font-size: 14px; margin: 20px 0; word-break: break-all; color: #374151;">
+    {{ activate_url }}
 </div>
 
-<p><strong>For your security:</strong></p>
-<ul style="margin: 10px 0; padding-left: 20px;">
-    <li>This confirmation link will expire in 3 days</li>
-    <li>Only click the link if you requested this change</li>
-    <li>Make sure you have access to this email address</li>
-    <li>Update your password if you suspect unauthorized access</li>
-</ul>
+<div style="background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%); border: 2px solid #fca5a5; border-radius: 12px; padding: 24px; margin: 24px 0;">
+    <p style="margin: 0 0 12px 0; font-size: 16px; color: #991b1b; font-weight: 600;">
+        🚨 <strong>Didn't request this email change?</strong>
+    </p>
+    <p style="margin: 0; font-size: 14px; color: #b91c1c; line-height: 1.5;">
+        If you didn't request this change, <strong>DO NOT click the confirmation link</strong>. Instead, contact our support team immediately as your account security may be at risk. We take account security very seriously and will investigate any unauthorized access attempts.
+    </p>
+</div>
 
-<p>If you need assistance or have questions about this email change, please contact our support team through the <a href="http://127.0.0.1:8000/admin-support/" style="color: #2563eb;">Admin Support page</a>.</p>
+<div style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border: 2px solid #fde68a; border-radius: 12px; padding: 24px; margin: 24px 0;">
+    <h3 style="color: #92400e; font-size: 18px; margin: 0 0 12px 0; font-weight: 600;">
+        🔐 Security Checklist:
+    </h3>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+        <li style="padding: 6px 0; position: relative; padding-left: 24px; color: #92400e;">
+            <span style="position: absolute; left: 0; top: 6px; color: #f59e0b;">•</span>
+            This confirmation link expires in 3 days for your protection
+        </li>
+        <li style="padding: 6px 0; position: relative; padding-left: 24px; color: #92400e;">
+            <span style="position: absolute; left: 0; top: 6px; color: #f59e0b;">•</span>
+            Only click the link if you personally requested this change
+        </li>
+        <li style="padding: 6px 0; position: relative; padding-left: 24px; color: #92400e;">
+            <span style="position: absolute; left: 0; top: 6px; color: #f59e0b;">•</span>
+            Ensure you have reliable access to this new email address
+        </li>
+        <li style="padding: 6px 0; position: relative; padding-left: 24px; color: #92400e;">
+            <span style="position: absolute; left: 0; top: 6px; color: #f59e0b;">•</span>
+            Consider updating your password if you suspect unauthorized access
+        </li>
+    </ul>
+</div>
 
-<p>Best regards,<br>
-<strong>The Youth Impact Training Programme Team</strong></p>
+<p style="margin-bottom: 18px; font-size: 16px; line-height: 1.7; color: #4b5563;">
+    <strong>Need help or have security concerns?</strong> Our support team is available 24/7 to assist with account security questions.
+    Visit our <a href="http://127.0.0.1:8000/admin-support/" style="color: #2563eb; text-decoration: none; font-weight: 500;">Admin Support page</a>
+    for immediate assistance.
+</p>
+
+<p style="margin-bottom: 18px; font-size: 16px; line-height: 1.7; color: #4b5563;">
+    We're committed to keeping your entrepreneurship education secure and accessible!
+</p>
+
+<p style="margin-bottom: 8px; font-size: 16px; line-height: 1.7; color: #4b5563;">
+    Securing your success,
+</p>
+<p style="margin: 0; font-size: 16px; line-height: 1.7; color: #1f2937; font-weight: 600;">
+    <strong>The Youth Impact Training Programme Security Team</strong><br>
+    <span style="color: #6b7280; font-weight: 400; font-size: 14px;">Protecting Your Entrepreneurial Journey</span>
+</p>
 {% endblock %}

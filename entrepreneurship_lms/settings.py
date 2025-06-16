@@ -213,10 +213,10 @@ ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
 
 # Password reset settings
-ACCOUNT_EMAIL_SUBJECT_PREFIX = '[Youth Impact Training Programme] '
+ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Youth Impact Training Programme '
 
 # Site URL for email links
-SITE_URL = config('SITE_URL', default='http://127.0.0.1:8000')
+SITE_URL = config('SITE_URL', default='https://yitplms.onrender.com')
 
 # Custom account adapter
 ACCOUNT_ADAPTER = 'accounts.adapters.CustomAccountAdapter'
@@ -228,7 +228,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "dedeexpeditions@gmail.com"
 EMAIL_HOST_PASSWORD = "roqu frlt wvof rqxk"
-DEFAULT_FROM_EMAIL = "Youth Impact Training Programme <dedeexpeditions@gmail.com>"
+DEFAULT_FROM_EMAIL = "Youth Impact Training Programme "
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # Email timeout settings
