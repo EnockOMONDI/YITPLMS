@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Youth Impact Training Programme{% endblock %}</title>
+    <style>
+        /* Email-safe CSS styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            background-color: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .email-header {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .email-header p {
+            margin: 10px 0 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .email-content {
+            padding: 40px 30px;
+        }
+        
+        .email-content h2 {
+            color: #1e293b;
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .email-content p {
+            margin-bottom: 16px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        }
+        
+        .email-footer {
+            background-color: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .email-footer p {
+            margin: 0;
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .email-footer a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        
+        .highlight-box {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .warning-box {
+            background-color: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .code-block {
+            background-color: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+        
+        /* Responsive styles */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .email-content {
+                padding: 30px 20px;
+            }
+            
+            .email-header {
+                padding: 25px 20px;
+            }
+            
+            .email-header h1 {
+                font-size: 20px;
+            }
+            
+            .btn-primary {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>{% block header_title %}Youth Impact Training Programme{% endblock %}</h1>
+            <p>{% block header_subtitle %}Entrepreneurship Learning Management System{% endblock %}</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="email-content">
+            {% block content %}
+            <h2>Welcome to YITP</h2>
+            <p>Thank you for joining the Youth Impact Training Programme. We're excited to have you on board!</p>
+            {% endblock %}
+        </div>
+        
+        <!-- Footer -->
+        <div class="email-footer">
+            <p>
+                <strong>Youth Impact Training Programme</strong><br>
+                Empowering young entrepreneurs to create lasting impact
+            </p>
+            <p style="margin-top: 15px;">
+                <a href="http://127.0.0.1:8000/">Visit our website</a> | 
+                <a href="http://127.0.0.1:8000/admin-support/">Need help?</a>
+            </p>
+            <p style="margin-top: 15px; font-size: 12px;">
+                This email was sent to you because you have an account with the Youth Impact Training Programme.
+                If you did not request this email, please ignore it.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

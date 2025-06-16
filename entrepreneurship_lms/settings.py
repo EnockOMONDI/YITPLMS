@@ -181,6 +181,14 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Django Allauth settings
 SITE_ID = 1
+
+# Authentication backends
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Account settings
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_REQUIRED = True
@@ -189,8 +197,42 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_UNIQUE_EMAIL = True
 
-# Email settings (for development)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Email confirmation settings
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
+ACCOUNT_EMAIL_CONFIRMATION_HMAC = True
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/accounts/login/'
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/dashboard/'
+
+# Session and login settings
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
+
+# Password reset settings
+ACCOUNT_EMAIL_SUBJECT_PREFIX = '[Youth Impact Training Programme] '
+
+# Site URL for email links
+SITE_URL = config('SITE_URL', default='http://127.0.0.1:8000')
+
+# Custom account adapter
+ACCOUNT_ADAPTER = 'accounts.adapters.CustomAccountAdapter'
+
+# Email Configuration - SMTP with Gmail
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "dedeexpeditions@gmail.com"
+EMAIL_HOST_PASSWORD = "roqu frlt wvof rqxk"
+DEFAULT_FROM_EMAIL = "Youth Impact Training Programme <dedeexpeditions@gmail.com>"
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+# Email timeout settings
+EMAIL_TIMEOUT = 60
 
 # Login/Logout URLs
 LOGIN_URL = '/accounts/login/'

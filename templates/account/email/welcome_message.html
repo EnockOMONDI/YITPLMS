@@ -1,0 +1,77 @@
+{% extends "account/email/base.html" %}
+{% load account %}
+
+{% block title %}Welcome to Youth Impact Training Programme{% endblock %}
+
+{% block header_title %}Welcome to YITP!{% endblock %}
+{% block header_subtitle %}Your entrepreneurial journey starts here{% endblock %}
+
+{% block content %}
+<h2>Welcome to the Youth Impact Training Programme!</h2>
+
+<p>Hello {{ user.first_name|default:"Future Entrepreneur" }},</p>
+
+<p>Congratulations! Your email has been confirmed and your account is now active. Welcome to the Youth Impact Training Programme community!</p>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="http://127.0.0.1:8000/dashboard/" class="btn-primary">Go to My Dashboard</a>
+</div>
+
+<div class="highlight-box">
+    <p><strong>What you can do now:</strong></p>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+        <li><strong>Explore Courses:</strong> Browse our comprehensive entrepreneurship curriculum</li>
+        <li><strong>Complete Your Profile:</strong> Add your information and learning goals</li>
+        <li><strong>Start Learning:</strong> Enroll in your first course and begin your journey</li>
+        <li><strong>Join the Community:</strong> Connect with fellow entrepreneurs</li>
+    </ul>
+</div>
+
+<h3>Quick Start Guide:</h3>
+<ol style="margin: 15px 0; padding-left: 20px;">
+    <li><strong>Visit Your Dashboard:</strong> Get an overview of your learning progress</li>
+    <li><strong>Browse Courses:</strong> Discover courses that match your interests</li>
+    <li><strong>Set Your Goals:</strong> Define what you want to achieve</li>
+    <li><strong>Start Learning:</strong> Enroll in your first course</li>
+</ol>
+
+<div class="highlight-box">
+    <p><strong>Featured Learning Paths:</strong></p>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+        <li>🚀 <strong>Startup Fundamentals:</strong> Learn the basics of starting a business</li>
+        <li>💡 <strong>Innovation & Creativity:</strong> Develop your creative problem-solving skills</li>
+        <li>📊 <strong>Business Planning:</strong> Create comprehensive business plans</li>
+        <li>💰 <strong>Financial Management:</strong> Master business finances and funding</li>
+        <li>📈 <strong>Marketing & Sales:</strong> Build your customer base and grow revenue</li>
+    </ul>
+</div>
+
+<h3>Need Help Getting Started?</h3>
+<p>Our support team is here to help you succeed:</p>
+<ul style="margin: 10px 0; padding-left: 20px;">
+    <li><a href="http://127.0.0.1:8000/how-it-works/" style="color: #2563eb;">How It Works Guide</a> - Learn how to use the platform</li>
+    <li><a href="http://127.0.0.1:8000/admin-support/" style="color: #2563eb;">Admin Support</a> - Get help from our team</li>
+    <li><a href="http://127.0.0.1:8000/courses/" style="color: #2563eb;">Course Catalog</a> - Browse all available courses</li>
+</ul>
+
+<div class="warning-box">
+    <p><strong>Keep Your Account Secure:</strong></p>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+        <li>Never share your login credentials</li>
+        <li>Use a strong, unique password</li>
+        <li>Log out when using shared computers</li>
+        <li>Contact us immediately if you notice suspicious activity</li>
+    </ul>
+</div>
+
+<p>We're excited to be part of your entrepreneurial journey and can't wait to see what you'll achieve!</p>
+
+<p>Happy learning!</p>
+
+<p>Best regards,<br>
+<strong>The Youth Impact Training Programme Team</strong></p>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="http://127.0.0.1:8000/courses/" class="btn-primary">Start Exploring Courses</a>
+</div>
+{% endblock %}
