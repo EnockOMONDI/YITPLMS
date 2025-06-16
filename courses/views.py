@@ -401,3 +401,33 @@ class HowItWorksView(TemplateView):
 
         return context
 
+
+class AdminSupportView(TemplateView):
+    """
+    Admin Support page - comprehensive guide for system administrators
+    """
+    template_name = 'courses/admin_support.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # System statistics for overview
+        context['total_courses'] = Course.objects.filter(is_published=True).count()
+        context['total_categories'] = Category.objects.filter(is_active=True).count()
+        context['total_students'] = User.objects.filter(is_active=True).count()
+        context['total_instructors'] = User.objects.filter(is_active=True, groups__name='Instructors').count()
+
+        # Recent activity statistics
+        from django.utils import timezone
+        from datetime import timedelta
+
+        last_30_days = timezone.now() - timedelta(days=30)
+        context['recent_enrollments'] = Enrollment.objects.filter(enrollment_date__gte=last_30_days).count()
+        context['active_enrollments'] = Enrollment.objects.filter(status='active').count()
+        context['completed_courses'] = Enrollment.objects.filter(status='completed').count()
+
+        # Course categories for demonstration
+        context['sample_categories'] = Category.objects.filter(is_active=True)[:8]
+
+        return context
+
