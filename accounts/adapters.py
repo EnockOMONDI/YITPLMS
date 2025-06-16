@@ -14,11 +14,10 @@ class CustomAccountAdapter(DefaultAccountAdapter):
     Custom account adapter for the Youth Impact Training Programme.
     Handles email sending and user account management.
     """
-    
+
     def send_mail(self, template_prefix, email, context):
         """
-        Override the default send_mail method to use our custom email templates
-        and add better error handling.
+        Override the default send_mail method to add better error handling.
         """
         try:
             # Call the parent method first
@@ -33,31 +32,14 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         """
         Send email confirmation with custom template and enhanced context.
         """
-        current_site = self.get_current_site(request)
-        activate_url = self.get_email_confirmation_url(request, emailconfirmation)
-        
-        # Enhanced context for email templates
-        ctx = {
-            "user": emailconfirmation.email_address.user,
-            "activate_url": activate_url,
-            "current_site": current_site,
-            "key": emailconfirmation.key,
-            "signup": signup,
-            "request": request,
-        }
-        
-        # Add user's first name if available
-        user = emailconfirmation.email_address.user
-        if hasattr(user, 'first_name') and user.first_name:
-            ctx['user_first_name'] = user.first_name
-        
+        # Use the parent class method to send confirmation email
+        # This ensures compatibility with Django Allauth's expected behavior
         try:
-            # Send the confirmation email
-            self.send_mail("account/email/email_confirmation", 
-                          emailconfirmation.email_address.email, ctx)
-            
+            # Call the parent method which handles all the complexity
+            super().send_confirmation_mail(request, emailconfirmation, signup)
+
             logger.info(f"Email confirmation sent to {emailconfirmation.email_address.email}")
-            
+
         except Exception as e:
             logger.error(f"Failed to send confirmation email to {emailconfirmation.email_address.email}: {str(e)}")
             raise
@@ -68,20 +50,23 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         This is called manually after email confirmation.
         """
         try:
+            # Get the site URL safely
+            site_url = getattr(settings, 'SITE_URL', 'https://yitplms.onrender.com')
+
             # Prepare context for welcome email
             ctx = {
                 'user': user,
                 'site_name': 'Youth Impact Training Programme',
-                'dashboard_url': f"{settings.SITE_URL}/dashboard/",
-                'courses_url': f"{settings.SITE_URL}/courses/",
-                'support_url': f"{settings.SITE_URL}/admin-support/",
+                'dashboard_url': f"{site_url}/dashboard/",
+                'courses_url': f"{site_url}/courses/",
+                'support_url': f"{site_url}/admin-support/",
             }
-            
+
             # Render email content
             subject = "Welcome to Youth Impact Training Programme!"
             html_message = render_to_string('account/email/welcome_message.html', ctx)
             plain_message = strip_tags(html_message)
-            
+
             # Send welcome email
             send_mail(
                 subject=subject,
@@ -91,13 +76,14 @@ class CustomAccountAdapter(DefaultAccountAdapter):
                 html_message=html_message,
                 fail_silently=False,
             )
-            
+
             logger.info(f"Welcome email sent to {user_email(user)}")
-            
+
         except Exception as e:
             logger.error(f"Failed to send welcome email to {user_email(user)}: {str(e)}")
             # Don't raise exception for welcome email failures
             # as the main registration process should still succeed
+            pass
     
     def confirm_email(self, request, email_address):
         """
@@ -105,37 +91,24 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         """
         # Call the parent method to handle the confirmation
         super().confirm_email(request, email_address)
-        
+
         # Send welcome email after successful confirmation
         try:
             self.send_welcome_email(email_address.user)
         except Exception as e:
             logger.error(f"Welcome email failed for user {email_address.user}: {str(e)}")
             # Don't fail the confirmation process if welcome email fails
+            pass
     
     def get_email_confirmation_url(self, request, emailconfirmation):
         """
         Construct the email confirmation URL.
         """
+        # Use the parent class method to get the URL
         url = super().get_email_confirmation_url(request, emailconfirmation)
-        
-        # Ensure we use the correct domain in production
-        if hasattr(settings, 'SITE_URL') and settings.SITE_URL:
-            # Replace the domain part with our configured site URL
-            from urllib.parse import urlparse, urlunparse
-            parsed = urlparse(url)
-            site_parsed = urlparse(settings.SITE_URL)
-            
-            # Reconstruct URL with correct domain
-            url = urlunparse((
-                site_parsed.scheme,
-                site_parsed.netloc,
-                parsed.path,
-                parsed.params,
-                parsed.query,
-                parsed.fragment
-            ))
-        
+
+        # In production, the URL should already be correct
+        # No need to modify it unless there are specific domain issues
         return url
     
     def get_login_redirect_url(self, request):
@@ -161,22 +134,19 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         """
         Save user with additional processing.
         """
-        user = super().save_user(request, user, form, commit=False)
-        
-        # Add any additional user processing here
-        # For example, setting default preferences
-        
+        user = super().save_user(request, user, form, commit=commit)
+
+        # Create user profile if it doesn't exist and user is saved
         if commit:
-            user.save()
-            
-            # Create user profile if it doesn't exist
             try:
                 from accounts.models import UserProfile
                 UserProfile.objects.get_or_create(user=user)
                 logger.info(f"User profile created for {user.email}")
             except Exception as e:
                 logger.error(f"Failed to create user profile for {user.email}: {str(e)}")
-        
+                # Don't fail the user creation process if profile creation fails
+                pass
+
         return user
     
     def get_from_email(self):
